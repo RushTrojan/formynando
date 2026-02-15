@@ -133,14 +133,11 @@
             height: 100%; 
             object-fit: cover;
         }
-        .artist-image img[src=""], 
-        .artist-image img:not([src]) {
-            display: none;
-        }
-        .artist-image::after {
+        .artist-image.no-image::before {
             content: '💜';
             font-size: 5rem;
             position: absolute;
+            z-index: 1;
         }
         .song-info h2 { color: white; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; }
         .song-info h3 { color: rgba(255, 255, 255, 0.8); font-size: 1.3rem; margin-bottom: 10px; }
@@ -281,8 +278,8 @@
             <div class="player-section">
                 <div class="now-playing">
                     <div class="artist-display">
-                        <div class="artist-image">
-                            <img id="artistImg" src="https://i.scdn.co/image/ab67616d0000b27325d7ee6a6f0e049a4bb9b8e3" alt="BTS">
+                        <div class="artist-image no-image" id="artistImgContainer">
+                            <img id="artistImg" src="" alt="Album Cover" style="display:none;">
                         </div>
                         <div class="song-info">
                             <h2 id="songTitle">Dynamite</h2>
@@ -337,136 +334,136 @@
 
     <script>
 const allSongs = [
-  {"title":"No More Dream","artist":"BTS","album":"2013 — 2 Cool 4 Skool","year":2013,"type":"group","youtubeId":"rBG5L7UsUxA","image":"https://i.scdn.co/image/ab67616d0000b273406ef953235ae4b6eb84d8cd"},
-  {"title":"We Are Bulletproof Pt.2","artist":"BTS","album":"2013 — 2 Cool 4 Skool","year":2013,"type":"group","youtubeId":"lE9lkSdtZeQ","image":"https://i.scdn.co/image/ab67616d0000b273406ef953235ae4b6eb84d8cd"},
-  {"title":"N.O","artist":"BTS","album":"2013 — O!RUL8,2?","year":2013,"type":"group","youtubeId":"mmgxPLLLyVo","image":"https://i.scdn.co/image/ab67616d0000b2730b7837a4e1691c166da32ae6"},
-  {"title":"Attack on Bangtan","artist":"BTS","album":"2013 — O!RUL8,2?","year":2013,"type":"group","youtubeId":"gP0Vo0U3Yn8","image":"https://i.scdn.co/image/ab67616d0000b2730b7837a4e1691c166da32ae6"},
-  {"title":"Boy In Luv","artist":"BTS","album":"2014 — Skool Luv Affair","year":2014,"type":"group","youtubeId":"m8MfJg68oCs","image":"https://i.scdn.co/image/ab67616d0000b273c407c7a4c0c82fc1147e806f"},
-  {"title":"Just One Day","artist":"BTS","album":"2014 — Skool Luv Affair","year":2014,"type":"group","youtubeId":"DTcKkcyS410","image":"https://i.scdn.co/image/ab67616d0000b273c407c7a4c0c82fc1147e806f"},
-  {"title":"Danger","artist":"BTS","album":"2014 — Dark & Wild","year":2014,"type":"group","youtubeId":"bagj78IQ3l0","image":"https://i.scdn.co/image/ab67616d0000b273829d671e1f4b904f970b3c45"},
-  {"title":"War of Hormone","artist":"BTS","album":"2014 — Dark & Wild","year":2014,"type":"group","youtubeId":"XQmpVHUi-0A","image":"https://i.scdn.co/image/ab67616d0000b273829d671e1f4b904f970b3c45"},
-  {"title":"I Need U","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.1","year":2015,"type":"group","youtubeId":"NMdTd9e-LEI","image":"https://i.scdn.co/image/ab67616d0000b2739a86c9d5f8c4cf0133c5e298"},
-  {"title":"Dope","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.1","year":2015,"type":"group","youtubeId":"BVwAVbKYYeM","image":"https://i.scdn.co/image/ab67616d0000b2739a86c9d5f8c4cf0133c5e298"},
-  {"title":"Run","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"group","youtubeId":"5Wn85Ge22FQ","image":"https://i.scdn.co/image/ab67616d0000b273aafe2a91e8918cf71c4d9e27"},
-  {"title":"Butterfly","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"group","youtubeId":"laE2mvwZN8w","image":"https://i.scdn.co/image/ab67616d0000b273aafe2a91e8918cf71c4d9e27"},
-  {"title":"House of Cards","artist":"BTS (Vocal Line)","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"OKdDc119Lzk","image":"https://i.scdn.co/image/ab67616d0000b273aafe2a91e8918cf71c4d9e27"},
-  {"title":"Fire","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"ALj5MKjy2BU","image":"https://i.scdn.co/image/ab67616d0000b27339b81f56ef838bc0ec0c1d35"},
-  {"title":"Save Me","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"GZjt_sA2eso","image":"https://i.scdn.co/image/ab67616d0000b27339b81f56ef838bc0ec0c1d35"},
-  {"title":"Young Forever","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"LbvE0FV_70U","image":"https://i.scdn.co/image/ab67616d0000b27339b81f56ef838bc0ec0c1d35"},
-  {"title":"Blood Sweat & Tears","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"hmE9f-TEutc","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Boy Meets Evil","artist":"J-Hope","album":"2016 — WINGS","year":2016,"type":"solo","members":"J-Hope","youtubeId":"iJJSh-eEdRk","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Begin","artist":"Jungkook","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jungkook","youtubeId":"m5_J7xuYxzs","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Lie","artist":"Jimin","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jimin","youtubeId":"GwsUXOjYTVk","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Stigma","artist":"V","album":"2016 — WINGS","year":2016,"type":"solo","members":"V","youtubeId":"BQ7vGQn5GzA","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"First Love","artist":"Suga","album":"2016 — WINGS","year":2016,"type":"solo","members":"Suga","youtubeId":"S9ou2FCLWlQ","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Reflection","artist":"RM","album":"2016 — WINGS","year":2016,"type":"solo","members":"RM","youtubeId":"D78QseJtht8","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"MAMA","artist":"J-Hope","album":"2016 — WINGS","year":2016,"type":"solo","members":"J-Hope","youtubeId":"m5BMmuwcGtg","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Awake","artist":"Jin","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jin","youtubeId":"9UK3V5xhED0","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Lost","artist":"BTS (Vocal Line)","album":"2016 — WINGS","year":2016,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"-YIj6H4ShQA","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"BTS Cypher Pt.4","artist":"BTS (Rap Line)","album":"2016 — WINGS","year":2016,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"Od8BLS0huVU","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Am I Wrong","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"pV6jpkbWHj0","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"21st Century Girl","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"JKlFuOpPhrk","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"2! 3!","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"E30APZxHh4c","image":"https://i.scdn.co/image/ab67616d0000b2738bbc1d5bb8f14e0c80484f82"},
-  {"title":"Spring Day","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"xEeFrLSkMm8","image":"https://i.scdn.co/image/ab67616d0000b2731733804446c4c7e8826eea66"},
-  {"title":"Not Today","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"9DwzBICPhdM","image":"https://i.scdn.co/image/ab67616d0000b2731733804446c4c7e8826eea66"},
-  {"title":"A Supplementary Story: You Never Walk Alone","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"6zu-7sgObQ4","image":"https://i.scdn.co/image/ab67616d0000b2731733804446c4c7e8826eea66"},
-  {"title":"DNA","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"MBdVXkSdhwU","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"Serendipity","artist":"Jimin","album":"2017 — Love Yourself 承 Her","year":2017,"type":"solo","members":"Jimin","youtubeId":"BEMaH9Sm3lQ","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"Best Of Me","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"VMqDSntAbC0","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"Dimple","artist":"BTS (Vocal Line)","album":"2017 — Love Yourself 承 Her","year":2017,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"dMtGmUfyBXw","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"Pied Piper","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"mz8cX-Ai0lE","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"MIC Drop","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"kTlv5_Bs8aw","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"Go Go","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"Fl54gG0B8I0","image":"https://i.scdn.co/image/ab67616d0000b273ea447f00f8eb99769d1238c9"},
-  {"title":"Fake Love","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"7C2z4GqqS5E","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Singularity","artist":"V","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"solo","members":"V","youtubeId":"p8npDG2ulKQ","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"The Truth Untold","artist":"BTS (Vocal Line)","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"tK4oNOE4V6s","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"134340","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"lu0XVRP_Bfc","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Paradise","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"obH7iPDAn2Q","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Love Maze","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"n_R0-YosZ3g","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Magic Shop","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"VTRGOBT6p80","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Airplane Pt.2","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"CxnJf0tWu48","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Anpanman","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"qkLMPihvKaQ","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"So What","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"hytBK5sNFZc","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"Outro: Tear","artist":"BTS (Rap Line)","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"L7hZ8Z9sM38","image":"https://i.scdn.co/image/ab67616d0000b273ce2f38cf93bd576f923dd7f6"},
-  {"title":"IDOL","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"pBuZEGYXA6E","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Euphoria","artist":"Jungkook","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Jungkook","youtubeId":"kX0vO4vlJuU","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Trivia 起: Just Dance","artist":"J-Hope","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"J-Hope","youtubeId":"4yx4RDTIsvU","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Trivia 承: Love","artist":"RM","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"RM","youtubeId":"YnISHmPSTJg","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Trivia 轉: Seesaw","artist":"Suga","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Suga","youtubeId":"rYzzBS8WojU","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Epiphany","artist":"Jin","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Jin","youtubeId":"fIkZOLsnoqY","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"I'm Fine","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"e4jR6VayWEI","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Answer: Love Myself","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"bo1zsFixnEE","image":"https://i.scdn.co/image/ab67616d0000b2737dd8f95320e8ef08aa121dfe"},
-  {"title":"Boy With Luv","artist":"BTS feat. Halsey","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"XsX3ATc3FbA","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"Persona","artist":"RM","album":"2019 — Map of the Soul: Persona","year":2019,"type":"solo","members":"RM","youtubeId":"M9Uy0opVF3s","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"Mikrokosmos","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"7Aa4zRgY9vE","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"Make It Right","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"eXBu09fwe3I","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"HOME","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"TzUsnRLaU40","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"Jamais Vu","artist":"Jin, J-Hope, Jungkook","album":"2019 — Map of the Soul: Persona","year":2019,"type":"unit","members":"Jin, J-Hope, Jungkook","youtubeId":"vBu179-5WHc","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"Dionysus","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"YmimK6HxqK4","image":"https://i.scdn.co/image/ab67616d0000b273c7ecc8f8ffd5c0e8b5d86346"},
-  {"title":"ON","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"mPVDGOVjRQ0","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Black Swan","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"0lapF4DQPKQ","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Shadow","artist":"Suga","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Suga","youtubeId":"PV1gCvzpSy0","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Filter","artist":"Jimin","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jimin","youtubeId":"216zfiZNSaU","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"My Time","artist":"Jungkook","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jungkook","youtubeId":"IbAv1Qn0xk8","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Louder Than Bombs","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"BVzTBj2O6Dc","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"UGH!","artist":"BTS (Rap Line)","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"y-0QlQH5d3Y","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"00:00 (Zero O'Clock)","artist":"BTS (Vocal Line)","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"sBWesVezIrc","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Inner Child","artist":"V","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"V","youtubeId":"f_YO7BBOTSk","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Friends","artist":"Jimin & V","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"Jimin, V","youtubeId":"7C0W70FgeWo","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Moon","artist":"Jin","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jin","youtubeId":"c9BVvX0iQJA","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Respect","artist":"RM & Suga","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"RM, Suga","youtubeId":"PGlNNesooys","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"We Are Bulletproof: The Eternal","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"7UWBYJjuIL0","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Ego","artist":"J-Hope","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"J-Hope","youtubeId":"LmApDbvNCXg","image":"https://i.scdn.co/image/ab67616d0000b27303ea8e00ddc6f00c32c01fc1"},
-  {"title":"Life Goes On","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"-5q5mZbe3V8","image":"https://i.scdn.co/image/ab67616d0000b27300b34aaa4ca3b16eeb732478"},
-  {"title":"Dynamite","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"gdZLi9oWNZg","image":"https://i.scdn.co/image/ab67616d0000b27325d7ee6a6f0e049a4bb9b8e3"},
-  {"title":"Fly To My Room","artist":"Jin, Jimin, V, J-Hope","album":"2020 — BE","year":2020,"type":"unit","members":"Jin, Jimin, V, J-Hope","youtubeId":"jI_m5l4N3ys","image":"https://i.scdn.co/image/ab67616d0000b27300b34aaa4ca3b16eeb732478"},
-  {"title":"Blue & Grey","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"iP62Tg04vww","image":"https://i.scdn.co/image/ab67616d0000b27300b34aaa4ca3b16eeb732478"},
-  {"title":"Telepathy","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"OC29BN3R8dM","image":"https://i.scdn.co/image/ab67616d0000b27300b34aaa4ca3b16eeb732478"},
-  {"title":"Dis-ease","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"rSi4UIWbtM0","image":"https://i.scdn.co/image/ab67616d0000b27300b34aaa4ca3b16eeb732478"},
-  {"title":"Stay","artist":"RM, Jin, Jungkook","album":"2020 — BE","year":2020,"type":"unit","members":"RM, Jin, Jungkook","youtubeId":"8uxI-0ge4-Y","image":"https://i.scdn.co/image/ab67616d0000b27300b34aaa4ca3b16eeb732478"},
-  {"title":"Butter","artist":"BTS","album":"2021 — Singles","year":2021,"type":"group","youtubeId":"WMweEpGlu_U","image":"https://i.scdn.co/image/ab67616d0000b273aac1e1a69a5e23a4c7086b3e"},
-  {"title":"Permission to Dance","artist":"BTS","album":"2021 — Singles","year":2021,"type":"group","youtubeId":"CuklIb9d3fI","image":"https://i.scdn.co/image/ab67616d0000b273093bb2ffce8f6f7b9f488c3d"},
-  {"title":"Yet To Come","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"kXpOEzNZ8hQ","image":"https://i.scdn.co/image/ab67616d0000b27358c4062df87127f19c23dc87"},
-  {"title":"Run BTS","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"aqW4xXUgmno","image":"https://i.scdn.co/image/ab67616d0000b27358c4062df87127f19c23dc87"},
-  {"title":"For Youth","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"kwyQ0MgmnDU","image":"https://i.scdn.co/image/ab67616d0000b27358c4062df87127f19c23dc87"},
-  {"title":"Wild Flower","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"u18be_kRmC0","image":"https://i.scdn.co/image/ab67616d0000b273aad53b910d6c1e7add31afc9"},
-  {"title":"Still Life","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"2vfmL4q2koo","image":"https://i.scdn.co/image/ab67616d0000b273aad53b910d6c1e7add31afc9"},
-  {"title":"All Day","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"sE5YAXaIypo","image":"https://i.scdn.co/image/ab67616d0000b273aad53b910d6c1e7add31afc9"},
-  {"title":"Closer","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"mJcjXjYWI6E","image":"https://i.scdn.co/image/ab67616d0000b273aad53b910d6c1e7add31afc9"},
-  {"title":"Lonely","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"7gISsiqxlN8","image":"https://i.scdn.co/image/ab67616d0000b273aad53b910d6c1e7add31afc9"},
-  {"title":"Hectic","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"lYv70OCSB8M","image":"https://i.scdn.co/image/ab67616d0000b273aad53b910d6c1e7add31afc9"},
-  {"title":"The Astronaut","artist":"Jin","album":"2022 — Jin: Solo Singles","year":2022,"type":"solo","members":"Jin","youtubeId":"c6ASQOwKkhk","image":"https://i.scdn.co/image/ab67616d0000b2730e5a20d10aee3b79e98daf06"},
-  {"title":"Super Tuna","artist":"Jin","album":"2021 — Jin: Solo Singles","year":2021,"type":"solo","members":"Jin","youtubeId":"ArHGiOxYwHM","image":"https://i1.sndcdn.com/artworks-VeMMEDy4t62f-0-t500x500.jpg"},
-  {"title":"Abyss","artist":"Jin","album":"2020 — Jin: Solo Singles","year":2020,"type":"solo","members":"Jin","youtubeId":"aqtSOksH-NE","image":"https://i1.sndcdn.com/artworks-GqsuwOxCgKg6Rqka-8CXOYA-t500x500.jpg"},
-  {"title":"Tonight","artist":"Jin","album":"2019 — Jin: Solo Singles","year":2019,"type":"solo","members":"Jin","youtubeId":"xMFVyP2npjM","image":"https://i1.sndcdn.com/artworks-000514992097-nj7o6t-t500x500.jpg"},
-  {"title":"Haegeum","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"iy9qZR_OGa0","image":"https://i.scdn.co/image/ab67616d0000b27368e53f98c17c5b95c46cb8f6"},
-  {"title":"AMYGDALA","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"IX1dkYoLHVs","image":"https://i.scdn.co/image/ab67616d0000b27368e53f98c17c5b95c46cb8f6"},
-  {"title":"Snooze","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"zCNqdvR9e_w","image":"https://i.scdn.co/image/ab67616d0000b27368e53f98c17c5b95c46cb8f6"},
-  {"title":"People Pt.2","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"uVD-YgzDzyY","image":"https://i.scdn.co/image/ab67616d0000b27368e53f98c17c5b95c46cb8f6"},
-  {"title":"More","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"pKdBFeewZYE","image":"https://i.scdn.co/image/ab67616d0000b273f61dfd30c8def08cb48b54fb"},
-  {"title":"Arson","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"QmpTkkaKYSU","image":"https://i.scdn.co/image/ab67616d0000b273f61dfd30c8def08cb48b54fb"},
-  {"title":"Future","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"Fh2PTrTaxv0","image":"https://i.scdn.co/image/ab67616d0000b273f61dfd30c8def08cb48b54fb"},
-  {"title":"What If...","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"QHLVk1JI8XI","image":"https://i.scdn.co/image/ab67616d0000b273f61dfd30c8def08cb48b54fb"},
-  {"title":"Safety Zone","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"VQ-qkm8KGD0","image":"https://i.scdn.co/image/ab67616d0000b273f61dfd30c8def08cb48b54fb"},
-  {"title":"Like Crazy","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"nOI67IDlNMQ","image":"https://i.scdn.co/image/ab67616d0000b273a64b596640dee2e8b5e35668"},
-  {"title":"Set Me Free Pt.2","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"UaywgAqcLxI","image":"https://i.scdn.co/image/ab67616d0000b273a64b596640dee2e8b5e35668"},
-  {"title":"Face-off","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"TLT_MqzRHfY","image":"https://i.scdn.co/image/ab67616d0000b273a64b596640dee2e8b5e35668"},
-  {"title":"Alone","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"7q9UDPZuTi0","image":"https://i.scdn.co/image/ab67616d0000b273a64b596640dee2e8b5e35668"},
-  {"title":"Slow Dancing","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"eI0iTRS0Ha8","image":"https://i.scdn.co/image/ab67616d0000b273752fc634fe8e8cb55a31ae3e"},
-  {"title":"Love Me Again","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"HYzyRHAHJl8","image":"https://i.scdn.co/image/ab67616d0000b273752fc634fe8e8cb55a31ae3e"},
-  {"title":"Rainy Days","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"yTsINmrAK4I","image":"https://i.scdn.co/image/ab67616d0000b273752fc634fe8e8cb55a31ae3e"},
-  {"title":"Blue","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"sIh9_cNCwPc","image":"https://i.scdn.co/image/ab67616d0000b273752fc634fe8e8cb55a31ae3e"},
-  {"title":"For Us","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"LHtzWOLBdPc","image":"https://i.scdn.co/image/ab67616d0000b273752fc634fe8e8cb55a31ae3e"},
-  {"title":"Seven","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"QU9c0053UAU","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"3D","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"mHNCM-YALSA","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Standing Next to You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"UNo0TG9LwwI","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Yes or No","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"2Q_iK9rN2eo","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Please Don't Change","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"RbJjqB7x6Xg","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Hate You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"tAcKfnf0zv4","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Somebody","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"ONxOGXC_YNk","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Too Sad to Dance","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"ASG-mLJuZrc","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Shot Glass of Tears","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"vpnQilFlc_4","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"},
-  {"title":"Closer to You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"z6LbYRY9tdw","image":"https://i.scdn.co/image/ab67616d0000b2734aeea7e3ff00e6ba1c8e0c24"}
+  {"title":"No More Dream","artist":"BTS","album":"2013 — 2 Cool 4 Skool","year":2013,"type":"group","youtubeId":"rBG5L7UsUxA","image":""},
+  {"title":"We Are Bulletproof Pt.2","artist":"BTS","album":"2013 — 2 Cool 4 Skool","year":2013,"type":"group","youtubeId":"lE9lkSdtZeQ","image":""},
+  {"title":"N.O","artist":"BTS","album":"2013 — O!RUL8,2?","year":2013,"type":"group","youtubeId":"mmgxPLLLyVo","image":""},
+  {"title":"Attack on Bangtan","artist":"BTS","album":"2013 — O!RUL8,2?","year":2013,"type":"group","youtubeId":"gP0Vo0U3Yn8","image":""},
+  {"title":"Boy In Luv","artist":"BTS","album":"2014 — Skool Luv Affair","year":2014,"type":"group","youtubeId":"m8MfJg68oCs","image":""},
+  {"title":"Just One Day","artist":"BTS","album":"2014 — Skool Luv Affair","year":2014,"type":"group","youtubeId":"DTcKkcyS410","image":""},
+  {"title":"Danger","artist":"BTS","album":"2014 — Dark & Wild","year":2014,"type":"group","youtubeId":"bagj78IQ3l0","image":""},
+  {"title":"War of Hormone","artist":"BTS","album":"2014 — Dark & Wild","year":2014,"type":"group","youtubeId":"XQmpVHUi-0A","image":""},
+  {"title":"I Need U","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.1","year":2015,"type":"group","youtubeId":"NMdTd9e-LEI","image":""},
+  {"title":"Dope","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.1","year":2015,"type":"group","youtubeId":"BVwAVbKYYeM","image":""},
+  {"title":"Run","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"group","youtubeId":"5Wn85Ge22FQ","image":""},
+  {"title":"Butterfly","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"group","youtubeId":"laE2mvwZN8w","image":""},
+  {"title":"House of Cards","artist":"BTS (Vocal Line)","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"OKdDc119Lzk","image":""},
+  {"title":"Fire","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"ALj5MKjy2BU","image":""},
+  {"title":"Save Me","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"GZjt_sA2eso","image":""},
+  {"title":"Young Forever","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"LbvE0FV_70U","image":""},
+  {"title":"Blood Sweat & Tears","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"hmE9f-TEutc","image":""},
+  {"title":"Boy Meets Evil","artist":"J-Hope","album":"2016 — WINGS","year":2016,"type":"solo","members":"J-Hope","youtubeId":"iJJSh-eEdRk","image":""},
+  {"title":"Begin","artist":"Jungkook","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jungkook","youtubeId":"m5_J7xuYxzs","image":""},
+  {"title":"Lie","artist":"Jimin","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jimin","youtubeId":"GwsUXOjYTVk","image":""},
+  {"title":"Stigma","artist":"V","album":"2016 — WINGS","year":2016,"type":"solo","members":"V","youtubeId":"BQ7vGQn5GzA","image":""},
+  {"title":"First Love","artist":"Suga","album":"2016 — WINGS","year":2016,"type":"solo","members":"Suga","youtubeId":"S9ou2FCLWlQ","image":""},
+  {"title":"Reflection","artist":"RM","album":"2016 — WINGS","year":2016,"type":"solo","members":"RM","youtubeId":"D78QseJtht8","image":""},
+  {"title":"MAMA","artist":"J-Hope","album":"2016 — WINGS","year":2016,"type":"solo","members":"J-Hope","youtubeId":"m5BMmuwcGtg","image":""},
+  {"title":"Awake","artist":"Jin","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jin","youtubeId":"9UK3V5xhED0","image":""},
+  {"title":"Lost","artist":"BTS (Vocal Line)","album":"2016 — WINGS","year":2016,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"-YIj6H4ShQA","image":""},
+  {"title":"BTS Cypher Pt.4","artist":"BTS (Rap Line)","album":"2016 — WINGS","year":2016,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"Od8BLS0huVU","image":""},
+  {"title":"Am I Wrong","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"pV6jpkbWHj0","image":""},
+  {"title":"21st Century Girl","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"JKlFuOpPhrk","image":""},
+  {"title":"2! 3!","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"E30APZxHh4c","image":""},
+  {"title":"Spring Day","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"xEeFrLSkMm8","image":""},
+  {"title":"Not Today","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"9DwzBICPhdM","image":""},
+  {"title":"A Supplementary Story: You Never Walk Alone","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"6zu-7sgObQ4","image":""},
+  {"title":"DNA","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"MBdVXkSdhwU","image":""},
+  {"title":"Serendipity","artist":"Jimin","album":"2017 — Love Yourself 承 Her","year":2017,"type":"solo","members":"Jimin","youtubeId":"BEMaH9Sm3lQ","image":""},
+  {"title":"Best Of Me","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"VMqDSntAbC0","image":""},
+  {"title":"Dimple","artist":"BTS (Vocal Line)","album":"2017 — Love Yourself 承 Her","year":2017,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"dMtGmUfyBXw","image":""},
+  {"title":"Pied Piper","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"mz8cX-Ai0lE","image":""},
+  {"title":"MIC Drop","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"kTlv5_Bs8aw","image":""},
+  {"title":"Go Go","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"Fl54gG0B8I0","image":""},
+  {"title":"Fake Love","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"7C2z4GqqS5E","image":""},
+  {"title":"Singularity","artist":"V","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"solo","members":"V","youtubeId":"p8npDG2ulKQ","image":""},
+  {"title":"The Truth Untold","artist":"BTS (Vocal Line)","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"tK4oNOE4V6s","image":""},
+  {"title":"134340","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"lu0XVRP_Bfc","image":""},
+  {"title":"Paradise","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"obH7iPDAn2Q","image":""},
+  {"title":"Love Maze","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"n_R0-YosZ3g","image":""},
+  {"title":"Magic Shop","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"VTRGOBT6p80","image":""},
+  {"title":"Airplane Pt.2","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"CxnJf0tWu48","image":""},
+  {"title":"Anpanman","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"qkLMPihvKaQ","image":""},
+  {"title":"So What","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"hytBK5sNFZc","image":""},
+  {"title":"Outro: Tear","artist":"BTS (Rap Line)","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"L7hZ8Z9sM38","image":""},
+  {"title":"IDOL","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"pBuZEGYXA6E","image":""},
+  {"title":"Euphoria","artist":"Jungkook","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Jungkook","youtubeId":"kX0vO4vlJuU","image":""},
+  {"title":"Trivia 起: Just Dance","artist":"J-Hope","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"J-Hope","youtubeId":"4yx4RDTIsvU","image":""},
+  {"title":"Trivia 承: Love","artist":"RM","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"RM","youtubeId":"YnISHmPSTJg","image":""},
+  {"title":"Trivia 轉: Seesaw","artist":"Suga","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Suga","youtubeId":"rYzzBS8WojU","image":""},
+  {"title":"Epiphany","artist":"Jin","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Jin","youtubeId":"fIkZOLsnoqY","image":""},
+  {"title":"I'm Fine","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"e4jR6VayWEI","image":""},
+  {"title":"Answer: Love Myself","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"bo1zsFixnEE","image":""},
+  {"title":"Boy With Luv","artist":"BTS feat. Halsey","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"XsX3ATc3FbA","image":""},
+  {"title":"Persona","artist":"RM","album":"2019 — Map of the Soul: Persona","year":2019,"type":"solo","members":"RM","youtubeId":"M9Uy0opVF3s","image":""},
+  {"title":"Mikrokosmos","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"7Aa4zRgY9vE","image":""},
+  {"title":"Make It Right","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"eXBu09fwe3I","image":""},
+  {"title":"HOME","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"TzUsnRLaU40","image":""},
+  {"title":"Jamais Vu","artist":"Jin, J-Hope, Jungkook","album":"2019 — Map of the Soul: Persona","year":2019,"type":"unit","members":"Jin, J-Hope, Jungkook","youtubeId":"vBu179-5WHc","image":""},
+  {"title":"Dionysus","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"YmimK6HxqK4","image":""},
+  {"title":"ON","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"mPVDGOVjRQ0","image":""},
+  {"title":"Black Swan","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"0lapF4DQPKQ","image":""},
+  {"title":"Shadow","artist":"Suga","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Suga","youtubeId":"PV1gCvzpSy0","image":""},
+  {"title":"Filter","artist":"Jimin","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jimin","youtubeId":"216zfiZNSaU","image":""},
+  {"title":"My Time","artist":"Jungkook","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jungkook","youtubeId":"IbAv1Qn0xk8","image":""},
+  {"title":"Louder Than Bombs","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"BVzTBj2O6Dc","image":""},
+  {"title":"UGH!","artist":"BTS (Rap Line)","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"y-0QlQH5d3Y","image":""},
+  {"title":"00:00 (Zero O'Clock)","artist":"BTS (Vocal Line)","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"sBWesVezIrc","image":""},
+  {"title":"Inner Child","artist":"V","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"V","youtubeId":"f_YO7BBOTSk","image":""},
+  {"title":"Friends","artist":"Jimin & V","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"Jimin, V","youtubeId":"7C0W70FgeWo","image":""},
+  {"title":"Moon","artist":"Jin","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jin","youtubeId":"c9BVvX0iQJA","image":""},
+  {"title":"Respect","artist":"RM & Suga","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"RM, Suga","youtubeId":"PGlNNesooys","image":""},
+  {"title":"We Are Bulletproof: The Eternal","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"7UWBYJjuIL0","image":""},
+  {"title":"Ego","artist":"J-Hope","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"J-Hope","youtubeId":"LmApDbvNCXg","image":""},
+  {"title":"Life Goes On","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"-5q5mZbe3V8","image":""},
+  {"title":"Dynamite","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"gdZLi9oWNZg","image":""},
+  {"title":"Fly To My Room","artist":"Jin, Jimin, V, J-Hope","album":"2020 — BE","year":2020,"type":"unit","members":"Jin, Jimin, V, J-Hope","youtubeId":"jI_m5l4N3ys","image":""},
+  {"title":"Blue & Grey","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"iP62Tg04vww","image":""},
+  {"title":"Telepathy","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"OC29BN3R8dM","image":""},
+  {"title":"Dis-ease","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"rSi4UIWbtM0","image":""},
+  {"title":"Stay","artist":"RM, Jin, Jungkook","album":"2020 — BE","year":2020,"type":"unit","members":"RM, Jin, Jungkook","youtubeId":"8uxI-0ge4-Y","image":""},
+  {"title":"Butter","artist":"BTS","album":"2021 — Singles","year":2021,"type":"group","youtubeId":"WMweEpGlu_U","image":""},
+  {"title":"Permission to Dance","artist":"BTS","album":"2021 — Singles","year":2021,"type":"group","youtubeId":"CuklIb9d3fI","image":""},
+  {"title":"Yet To Come","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"kXpOEzNZ8hQ","image":""},
+  {"title":"Run BTS","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"aqW4xXUgmno","image":""},
+  {"title":"For Youth","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"kwyQ0MgmnDU","image":""},
+  {"title":"Wild Flower","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"u18be_kRmC0","image":""},
+  {"title":"Still Life","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"2vfmL4q2koo","image":""},
+  {"title":"All Day","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"sE5YAXaIypo","image":""},
+  {"title":"Closer","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"mJcjXjYWI6E","image":""},
+  {"title":"Lonely","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"7gISsiqxlN8","image":""},
+  {"title":"Hectic","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"lYv70OCSB8M","image":""},
+  {"title":"The Astronaut","artist":"Jin","album":"2022 — Jin: Solo Singles","year":2022,"type":"solo","members":"Jin","youtubeId":"c6ASQOwKkhk","image":""},
+  {"title":"Super Tuna","artist":"Jin","album":"2021 — Jin: Solo Singles","year":2021,"type":"solo","members":"Jin","youtubeId":"ArHGiOxYwHM","image":""},
+  {"title":"Abyss","artist":"Jin","album":"2020 — Jin: Solo Singles","year":2020,"type":"solo","members":"Jin","youtubeId":"aqtSOksH-NE","image":""},
+  {"title":"Tonight","artist":"Jin","album":"2019 — Jin: Solo Singles","year":2019,"type":"solo","members":"Jin","youtubeId":"xMFVyP2npjM","image":""},
+  {"title":"Haegeum","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"iy9qZR_OGa0","image":""},
+  {"title":"AMYGDALA","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"IX1dkYoLHVs","image":""},
+  {"title":"Snooze","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"zCNqdvR9e_w","image":""},
+  {"title":"People Pt.2","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"uVD-YgzDzyY","image":""},
+  {"title":"More","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"pKdBFeewZYE","image":""},
+  {"title":"Arson","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"QmpTkkaKYSU","image":""},
+  {"title":"Future","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"Fh2PTrTaxv0","image":""},
+  {"title":"What If...","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"QHLVk1JI8XI","image":""},
+  {"title":"Safety Zone","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"VQ-qkm8KGD0","image":""},
+  {"title":"Like Crazy","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"nOI67IDlNMQ","image":""},
+  {"title":"Set Me Free Pt.2","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"UaywgAqcLxI","image":""},
+  {"title":"Face-off","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"TLT_MqzRHfY","image":""},
+  {"title":"Alone","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"7q9UDPZuTi0","image":""},
+  {"title":"Slow Dancing","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"eI0iTRS0Ha8","image":""},
+  {"title":"Love Me Again","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"HYzyRHAHJl8","image":""},
+  {"title":"Rainy Days","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"yTsINmrAK4I","image":""},
+  {"title":"Blue","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"sIh9_cNCwPc","image":""},
+  {"title":"For Us","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"LHtzWOLBdPc","image":""},
+  {"title":"Seven","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"QU9c0053UAU","image":""},
+  {"title":"3D","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"mHNCM-YALSA","image":""},
+  {"title":"Standing Next to You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"UNo0TG9LwwI","image":""},
+  {"title":"Yes or No","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"2Q_iK9rN2eo","image":""},
+  {"title":"Please Don't Change","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"RbJjqB7x6Xg","image":""},
+  {"title":"Hate You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"tAcKfnf0zv4","image":""},
+  {"title":"Somebody","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"ONxOGXC_YNk","image":""},
+  {"title":"Too Sad to Dance","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"ASG-mLJuZrc","image":""},
+  {"title":"Shot Glass of Tears","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"vpnQilFlc_4","image":""},
+  {"title":"Closer to You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"z6LbYRY9tdw","image":""}
 ];
 
 let currentSongIndex = 0;
@@ -479,7 +476,7 @@ function renderSongList() {
     const albumGroups = {};
     filteredSongs.forEach((song, index) => {
         if (!albumGroups[song.album]) albumGroups[song.album] = [];
-        albumGroups[song.album].push({...song, originalIndex: index});
+        albumGroups[song.album].push({...song, originalIndex: allSongs.indexOf(song)});
     });
     Object.keys(albumGroups).forEach(albumName => {
         const albumSection = document.createElement('div');
@@ -514,14 +511,14 @@ function playSong(index) {
     document.getElementById('songTitle').textContent = song.title;
     document.getElementById('artistName').textContent = song.artist;
     document.getElementById('albumName').textContent = song.album;
-    document.getElementById('artistImg').src = song.image;
     document.getElementById('statYear').textContent = song.year;
     document.getElementById('statType').textContent = song.type.charAt(0).toUpperCase() + song.type.slice(1);
     document.getElementById('statAlbum').textContent = song.album.split('—')[1]?.trim() || song.album;
+    
     if (song.youtubeId) {
-        document.getElementById('videoPlayer').innerHTML = `<iframe style="border-radius:12px" width="100%" height="400" src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 10px; text-align: center;">⚠️ Video not playing? Click "🔧 Fix Videos" to update!</p>`;
+        document.getElementById('videoPlayer').innerHTML = `<iframe style="border-radius:12px" width="100%" height="400" src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     } else {
-        document.getElementById('videoPlayer').innerHTML = '<div style="background: rgba(255,255,255,0.1); padding: 40px; border-radius: 12px; text-align: center;"><p style="color: white; font-size: 1.2rem;">❌ No video</p><p style="color: rgba(255,255,255,0.7); margin-top: 10px;">Click "🔧 Fix Videos" to add one!</p></div>';
+        document.getElementById('videoPlayer').innerHTML = '<div style="background: rgba(255,255,255,0.1); padding: 40px; border-radius: 12px; text-align: center;"><p style="color: white; font-size: 1.2rem;">❌ No video</p></div>';
     }
     renderSongList();
     if (document.getElementById('adminPanel').classList.contains('show')) updateAdminPanel();
@@ -548,36 +545,40 @@ function toggleAdmin() {
     panel.classList.toggle('show');
     if (panel.classList.contains('show')) updateAdminPanel();
 }
+
 function updateAdminPanel() {
     const song = allSongs[currentSongIndex];
     document.getElementById('currentSongName').textContent = song.title + ' - ' + song.artist;
     document.getElementById('currentVideoId').value = song.youtubeId || 'Not set';
     document.getElementById('newVideoId').value = '';
 }
+
 function searchYouTube() {
     const song = allSongs[currentSongIndex];
-    window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(song.title + ' ' + song.artist + ' lyrics'), '_blank');
+    window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(song.title + ' ' + song.artist), '_blank');
 }
+
 function updateVideoId() {
     const newId = document.getElementById('newVideoId').value.trim();
     if (!newId) return alert('Enter a YouTube video ID!');
     allSongs[currentSongIndex].youtubeId = newId;
     playSong(currentSongIndex);
     updateAdminPanel();
-    alert('Video updated! Click "💾 Save All Changes" to save permanently.');
+    alert('Video updated!');
 }
+
 function copyAllData() {
     const dataStr = 'const allSongs = ' + JSON.stringify(allSongs, null, 2) + ';';
     const modal = document.createElement('div');
     modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
-    modal.innerHTML = `<div style="background:white;padding:30px;border-radius:15px;max-width:800px;width:100%;max-height:90vh;overflow:auto;"><h3 style="color:#764ba2;margin-bottom:15px;">📋 Copy This Data</h3><p style="color:#666;font-size:0.9rem;margin-bottom:15px;">1. Click in box<br>2. Ctrl+A (or Cmd+A)<br>3. Ctrl+C (or Cmd+C)<br>4. Paste into HTML file</p><textarea id="dataOutput" style="width:100%;height:400px;padding:15px;border:2px solid #764ba2;border-radius:10px;font-family:monospace;font-size:0.85rem;" readonly>${dataStr}</textarea><div style="margin-top:15px;text-align:right;"><button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#764ba2;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:bold;">Close</button></div></div>`;
+    modal.innerHTML = `<div style="background:white;padding:30px;border-radius:15px;max-width:800px;width:100%;max-height:90vh;overflow:auto;"><h3 style="color:#764ba2;margin-bottom:15px;">📋 Copy This Data</h3><textarea id="dataOutput" style="width:100%;height:400px;padding:15px;border:2px solid #764ba2;border-radius:10px;font-family:monospace;font-size:0.85rem;" readonly>${dataStr}</textarea><div style="margin-top:15px;text-align:right;"><button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#764ba2;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:bold;">Close</button></div></div>`;
     document.body.appendChild(modal);
     setTimeout(() => { const t = document.getElementById('dataOutput'); t.focus(); t.select(); }, 100);
 }
 
 filteredSongs = [...allSongs];
 renderSongList();
-playSong(0);
+playSong(77); // Start with Dynamite
 </script>
 </body>
 </html>
