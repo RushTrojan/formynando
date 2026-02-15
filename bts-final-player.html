@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTS Complete Discography Player 💜</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 40px 20px; color: white; }
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #fff, #ffd700, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); }
+        }
+        .header p { font-size: 1.2rem; opacity: 0.9; }
+        .main-content { display: grid; grid-template-columns: 350px 1fr; gap: 30px; margin-top: 30px; }
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 8px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 215, 0, 0.5); border-radius: 10px; }
+        .filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filter-tab {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .filter-tab:hover, .filter-tab.active { background: rgba(255, 215, 0, 0.3); border-color: #ffd700; }
+        .album-section { margin-bottom: 25px; }
+        .album-header {
+            color: #ffd700;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .album-header:hover { background: rgba(255, 215, 0, 0.2); }
+        .song-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .song-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(8px);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        .song-item.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 105, 180, 0.3));
+            border-color: #ffd700;
+            transform: scale(1.02);
+        }
+        .song-item h4 { color: white; font-size: 0.95rem; margin-bottom: 3px; }
+        .song-item p { color: rgba(255, 255, 255, 0.6); font-size: 0.8rem; }
+        .member-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(255, 105, 180, 0.3);
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-top: 3px;
+        }
+        .player-section { display: grid; gap: 25px; }
+        .now-playing {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .artist-display {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .artist-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .artist-image img { width: 100%; height: 100%; object-fit: cover; }
+        .song-info h2 { color: white; font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; }
+        .song-info h3 { color: rgba(255, 255, 255, 0.8); font-size: 1.3rem; margin-bottom: 10px; }
+        .song-info .album { color: rgba(255, 255, 255, 0.6); font-size: 1rem; margin-bottom: 20px; }
+        .visualizer {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: flex-end;
+            height: 60px;
+            margin: 20px 0;
+        }
+        .bar {
+            width: 8px;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 4px;
+            animation: wave 0.8s ease-in-out infinite;
+        }
+        .bar:nth-child(1) { animation-delay: 0s; height: 20px; }
+        .bar:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+        .bar:nth-child(3) { animation-delay: 0.2s; height: 45px; }
+        .bar:nth-child(4) { animation-delay: 0.3s; height: 35px; }
+        .bar:nth-child(5) { animation-delay: 0.4s; height: 50px; }
+        .bar:nth-child(6) { animation-delay: 0.5s; height: 40px; }
+        .bar:nth-child(7) { animation-delay: 0.6s; height: 25px; }
+        .bar:nth-child(8) { animation-delay: 0.7s; height: 35px; }
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.5); }
+        }
+        #videoPlayer { margin: 20px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+        .controls { display: flex; align-items: center; gap: 15px; justify-content: center; margin-top: 20px; }
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+        .control-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
+        .play-btn { width: 70px; height: 70px; background: linear-gradient(135deg, #ffd700, #ff69b4); font-size: 1.8rem; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .stat-card { background: rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 12px; text-align: center; }
+        .stat-card .number { color: #ffd700; font-size: 1.5rem; font-weight: bold; display: block; }
+        .stat-card .label { color: rgba(255, 255, 255, 0.7); font-size: 0.85rem; }
+        .admin-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            color: white;
+            font-size: 0.9rem;
+            max-width: 350px;
+            display: none;
+            z-index: 1000;
+        }
+        .admin-panel.show { display: block; }
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ffd700, #ff69b4);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 999;
+        }
+        .admin-panel input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+        }
+        .admin-panel button {
+            background: #ffd700;
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        .search-box::placeholder { color: rgba(255, 255, 255, 0.5); }
+        @media (max-width: 1200px) {
+            .main-content { grid-template-columns: 1fr; }
+            .artist-display { grid-template-columns: 1fr; text-align: center; }
+            .artist-image { margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💜 BTS COMPLETE DISCOGRAPHY 💜</h1>
+            <p>Every Song • Every Album • Every Member</p>
+            <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">🎵 2013-2024 • 100+ Songs • Powered by YouTube</p>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search songs, albums, members...">
+                <div class="filter-tabs">
+                    <div class="filter-tab active" onclick="filterByType('all')">All</div>
+                    <div class="filter-tab" onclick="filterByType('group')">Group</div>
+                    <div class="filter-tab" onclick="filterByType('solo')">Solo</div>
+                    <div class="filter-tab" onclick="filterByType('unit')">Unit</div>
+                </div>
+                <div id="songList"></div>
+            </div>
+
+            <div class="player-section">
+                <div class="now-playing">
+                    <div class="artist-display">
+                        <div class="artist-image">
+                            <img id="artistImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/BTS_Korea_Pavilion_Expo_2020_01.jpg/440px-BTS_Korea_Pavilion_Expo_2020_01.jpg" alt="BTS">
+                        </div>
+                        <div class="song-info">
+                            <h2 id="songTitle">Dynamite</h2>
+                            <h3 id="artistName">BTS</h3>
+                            <p class="album" id="albumName">BE (Deluxe Edition)</p>
+                            <div class="visualizer">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="videoPlayer"></div>
+                    <div class="controls">
+                        <button class="control-btn" onclick="previousSong()" title="Previous">⏮️</button>
+                        <button class="control-btn play-btn" onclick="togglePlay()" title="Play/Pause">▶️</button>
+                        <button class="control-btn" onclick="nextSong()" title="Next">⏭️</button>
+                        <button class="control-btn" onclick="shuffleSong()" title="Shuffle">🔀</button>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-card"><span class="number" id="statYear">2020</span><span class="label">Year</span></div>
+                        <div class="stat-card"><span class="number" id="statType">Group</span><span class="label">Type</span></div>
+                        <div class="stat-card"><span class="number" id="statAlbum">BE</span><span class="label">Album</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="admin-toggle" onclick="toggleAdmin()">🔧 Fix Videos</button>
+    
+    <div class="admin-panel" id="adminPanel">
+        <h3 style="margin-bottom: 15px; color: #ffd700;">Update Video ID</h3>
+        <p style="font-size: 0.85rem; margin-bottom: 10px;">Current: <span id="currentSongName">-</span></p>
+        <label style="font-size: 0.8rem; opacity: 0.8;">Current YouTube ID:</label>
+        <input type="text" id="currentVideoId" readonly>
+        <label style="font-size: 0.8rem; opacity: 0.8; margin-top: 10px; display: block;">New YouTube ID:</label>
+        <input type="text" id="newVideoId" placeholder="Enter new video ID">
+        <div style="font-size: 0.75rem; opacity: 0.6; margin: 5px 0;">
+            Example: For youtube.com/watch?v=<b>ABC123</b>, enter: ABC123
+        </div>
+        <button onclick="searchYouTube()" style="background: #ff0000; color: white; width: 100%;">🔍 Search on YouTube</button>
+        <button onclick="updateVideoId()">✅ Update Video</button>
+        <button onclick="copyAllData()" style="background: #764ba2; color: white; margin-left: 5px;">💾 Save All Changes</button>
+        <button onclick="toggleAdmin()" style="background: #666; color: white; margin-top: 5px;">❌ Close</button>
+    </div>
+
+    <script>
+const allSongs = [
+  {"title":"No More Dream","artist":"BTS","album":"2013 — 2 Cool 4 Skool","year":2013,"type":"group","youtubeId":"rBG5L7UsUxA","image":"https://upload.wikimedia.org/wikipedia/en/5/58/BTS_-_2_Cool_4_Skool.jpg"},
+  {"title":"We Are Bulletproof Pt.2","artist":"BTS","album":"2013 — 2 Cool 4 Skool","year":2013,"type":"group","youtubeId":"lE9lkSdtZeQ","image":"https://upload.wikimedia.org/wikipedia/en/5/58/BTS_-_2_Cool_4_Skool.jpg"},
+  {"title":"N.O","artist":"BTS","album":"2013 — O!RUL8,2?","year":2013,"type":"group","youtubeId":"mmgxPLLLyVo","image":"https://upload.wikimedia.org/wikipedia/en/7/76/BTS_-_O%21RUL8%2C2%3F.jpg"},
+  {"title":"Attack on Bangtan","artist":"BTS","album":"2013 — O!RUL8,2?","year":2013,"type":"group","youtubeId":"gP0Vo0U3Yn8","image":"https://upload.wikimedia.org/wikipedia/en/7/76/BTS_-_O%21RUL8%2C2%3F.jpg"},
+  {"title":"Boy In Luv","artist":"BTS","album":"2014 — Skool Luv Affair","year":2014,"type":"group","youtubeId":"m8MfJg68oCs","image":"https://upload.wikimedia.org/wikipedia/en/f/f8/BTS_Skool_Luv_Affair_Cover.jpg"},
+  {"title":"Just One Day","artist":"BTS","album":"2014 — Skool Luv Affair","year":2014,"type":"group","youtubeId":"DTcKkcyS410","image":"https://upload.wikimedia.org/wikipedia/en/f/f8/BTS_Skool_Luv_Affair_Cover.jpg"},
+  {"title":"Danger","artist":"BTS","album":"2014 — Dark & Wild","year":2014,"type":"group","youtubeId":"bagj78IQ3l0","image":"https://upload.wikimedia.org/wikipedia/en/5/50/BTS_-_Dark_%26_Wild.jpg"},
+  {"title":"War of Hormone","artist":"BTS","album":"2014 — Dark & Wild","year":2014,"type":"group","youtubeId":"XQmpVHUi-0A","image":"https://upload.wikimedia.org/wikipedia/en/5/50/BTS_-_Dark_%26_Wild.jpg"},
+  {"title":"I Need U","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.1","year":2015,"type":"group","youtubeId":"NMdTd9e-LEI","image":"https://upload.wikimedia.org/wikipedia/en/d/db/BTS_-_The_Most_Beautiful_Moment_in_Life%2C_Part_1.jpg"},
+  {"title":"Dope","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.1","year":2015,"type":"group","youtubeId":"BVwAVbKYYeM","image":"https://upload.wikimedia.org/wikipedia/en/d/db/BTS_-_The_Most_Beautiful_Moment_in_Life%2C_Part_1.jpg"},
+  {"title":"Run","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"group","youtubeId":"5Wn85Ge22FQ","image":"https://upload.wikimedia.org/wikipedia/en/0/0b/BTS_-_The_Most_Beautiful_Moment_in_Life%2C_Part_2.jpg"},
+  {"title":"Butterfly","artist":"BTS","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"group","youtubeId":"laE2mvwZN8w","image":"https://upload.wikimedia.org/wikipedia/en/0/0b/BTS_-_The_Most_Beautiful_Moment_in_Life%2C_Part_2.jpg"},
+  {"title":"House of Cards","artist":"BTS (Vocal Line)","album":"2015 — The Most Beautiful Moment in Life Pt.2","year":2015,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"OKdDc119Lzk","image":"https://upload.wikimedia.org/wikipedia/en/0/0b/BTS_-_The_Most_Beautiful_Moment_in_Life%2C_Part_2.jpg"},
+  {"title":"Fire","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"ALj5MKjy2BU","image":"https://upload.wikimedia.org/wikipedia/en/6/61/BTS_-_The_Most_Beautiful_Moment_in_Life_-_Young_Forever.jpg"},
+  {"title":"Save Me","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"GZjt_sA2eso","image":"https://upload.wikimedia.org/wikipedia/en/6/61/BTS_-_The_Most_Beautiful_Moment_in_Life_-_Young_Forever.jpg"},
+  {"title":"Young Forever","artist":"BTS","album":"2016 — HYYH: Young Forever","year":2016,"type":"group","youtubeId":"LbvE0FV_70U","image":"https://upload.wikimedia.org/wikipedia/en/6/61/BTS_-_The_Most_Beautiful_Moment_in_Life_-_Young_Forever.jpg"},
+  {"title":"Blood Sweat & Tears","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"hmE9f-TEutc","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Boy Meets Evil","artist":"J-Hope","album":"2016 — WINGS","year":2016,"type":"solo","members":"J-Hope","youtubeId":"iJJSh-eEdRk","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Begin","artist":"Jungkook","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jungkook","youtubeId":"m5_J7xuYxzs","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Lie","artist":"Jimin","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jimin","youtubeId":"GwsUXOjYTVk","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Stigma","artist":"V","album":"2016 — WINGS","year":2016,"type":"solo","members":"V","youtubeId":"BQ7vGQn5GzA","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"First Love","artist":"Suga","album":"2016 — WINGS","year":2016,"type":"solo","members":"Suga","youtubeId":"S9ou2FCLWlQ","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Reflection","artist":"RM","album":"2016 — WINGS","year":2016,"type":"solo","members":"RM","youtubeId":"D78QseJtht8","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"MAMA","artist":"J-Hope","album":"2016 — WINGS","year":2016,"type":"solo","members":"J-Hope","youtubeId":"m5BMmuwcGtg","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Awake","artist":"Jin","album":"2016 — WINGS","year":2016,"type":"solo","members":"Jin","youtubeId":"9UK3V5xhED0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Lost","artist":"BTS (Vocal Line)","album":"2016 — WINGS","year":2016,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"-YIj6H4ShQA","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"BTS Cypher Pt.4","artist":"BTS (Rap Line)","album":"2016 — WINGS","year":2016,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"Od8BLS0huVU","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Am I Wrong","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"pV6jpkbWHj0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"21st Century Girl","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"JKlFuOpPhrk","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"2! 3!","artist":"BTS","album":"2016 — WINGS","year":2016,"type":"group","youtubeId":"E30APZxHh4c","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/63/BTS_Wings_cover_art.png/220px-BTS_Wings_cover_art.png"},
+  {"title":"Spring Day","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"xEeFrLSkMm8","image":"https://upload.wikimedia.org/wikipedia/en/8/8b/BTS_Spring_Day_Cover.png"},
+  {"title":"Not Today","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"9DwzBICPhdM","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/61/BTS_-_You_Never_Walk_Alone.jpg/220px-BTS_-_You_Never_Walk_Alone.jpg"},
+  {"title":"A Supplementary Story: You Never Walk Alone","artist":"BTS","album":"2017 — You Never Walk Alone","year":2017,"type":"group","youtubeId":"6zu-7sgObQ4","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/61/BTS_-_You_Never_Walk_Alone.jpg/220px-BTS_-_You_Never_Walk_Alone.jpg"},
+  {"title":"DNA","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"MBdVXkSdhwU","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"Serendipity","artist":"Jimin","album":"2017 — Love Yourself 承 Her","year":2017,"type":"solo","members":"Jimin","youtubeId":"BEMaH9Sm3lQ","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"Best Of Me","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"VMqDSntAbC0","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"Dimple","artist":"BTS (Vocal Line)","album":"2017 — Love Yourself 承 Her","year":2017,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"dMtGmUfyBXw","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"Pied Piper","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"mz8cX-Ai0lE","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"MIC Drop","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"kTlv5_Bs8aw","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"Go Go","artist":"BTS","album":"2017 — Love Yourself 承 Her","year":2017,"type":"group","youtubeId":"Fl54gG0B8I0","image":"https://upload.wikimedia.org/wikipedia/en/2/25/BTS_-_Love_Yourself_-_Her.png"},
+  {"title":"Fake Love","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"7C2z4GqqS5E","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Singularity","artist":"V","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"solo","members":"V","youtubeId":"p8npDG2ulKQ","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"The Truth Untold","artist":"BTS (Vocal Line)","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"tK4oNOE4V6s","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"134340","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"lu0XVRP_Bfc","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Paradise","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"obH7iPDAn2Q","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Love Maze","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"n_R0-YosZ3g","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Magic Shop","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"VTRGOBT6p80","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Airplane Pt.2","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"CxnJf0tWu48","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Anpanman","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"qkLMPihvKaQ","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"So What","artist":"BTS","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"group","youtubeId":"hytBK5sNFZc","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"Outro: Tear","artist":"BTS (Rap Line)","album":"2018 — Love Yourself 轉 Tear","year":2018,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"L7hZ8Z9sM38","image":"https://upload.wikimedia.org/wikipedia/en/c/c4/BTS_-_Love_Yourself_Tear.png"},
+  {"title":"IDOL","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"pBuZEGYXA6E","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Euphoria","artist":"Jungkook","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Jungkook","youtubeId":"kX0vO4vlJuU","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Trivia 起: Just Dance","artist":"J-Hope","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"J-Hope","youtubeId":"4yx4RDTIsvU","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Trivia 承: Love","artist":"RM","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"RM","youtubeId":"YnISHmPSTJg","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Trivia 轉: Seesaw","artist":"Suga","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Suga","youtubeId":"rYzzBS8WojU","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Epiphany","artist":"Jin","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"solo","members":"Jin","youtubeId":"fIkZOLsnoqY","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"I'm Fine","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"e4jR6VayWEI","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Answer: Love Myself","artist":"BTS","album":"2018 — Love Yourself 結 Answer","year":2018,"type":"group","youtubeId":"bo1zsFixnEE","image":"https://upload.wikimedia.org/wikipedia/en/2/22/BTS_-_Love_Yourself_-_Answer.png"},
+  {"title":"Boy With Luv","artist":"BTS feat. Halsey","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"XsX3ATc3FbA","image":"https://upload.wikimedia.org/wikipedia/en/2/23/Boy_with_Luv_cover.png"},
+  {"title":"Persona","artist":"RM","album":"2019 — Map of the Soul: Persona","year":2019,"type":"solo","members":"RM","youtubeId":"M9Uy0opVF3s","image":"https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Map_of_the_Soul_Persona_cover_art.png/220px-Map_of_the_Soul_Persona_cover_art.png"},
+  {"title":"Mikrokosmos","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"7Aa4zRgY9vE","image":"https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Map_of_the_Soul_Persona_cover_art.png/220px-Map_of_the_Soul_Persona_cover_art.png"},
+  {"title":"Make It Right","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"eXBu09fwe3I","image":"https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Map_of_the_Soul_Persona_cover_art.png/220px-Map_of_the_Soul_Persona_cover_art.png"},
+  {"title":"HOME","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"TzUsnRLaU40","image":"https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Map_of_the_Soul_Persona_cover_art.png/220px-Map_of_the_Soul_Persona_cover_art.png"},
+  {"title":"Jamais Vu","artist":"Jin, J-Hope, Jungkook","album":"2019 — Map of the Soul: Persona","year":2019,"type":"unit","members":"Jin, J-Hope, Jungkook","youtubeId":"vBu179-5WHc","image":"https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Map_of_the_Soul_Persona_cover_art.png/220px-Map_of_the_Soul_Persona_cover_art.png"},
+  {"title":"Dionysus","artist":"BTS","album":"2019 — Map of the Soul: Persona","year":2019,"type":"group","youtubeId":"YmimK6HxqK4","image":"https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Map_of_the_Soul_Persona_cover_art.png/220px-Map_of_the_Soul_Persona_cover_art.png"},
+  {"title":"ON","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"mPVDGOVjRQ0","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Black Swan","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"0lapF4DQPKQ","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Shadow","artist":"Suga","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Suga","youtubeId":"PV1gCvzpSy0","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Filter","artist":"Jimin","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jimin","youtubeId":"216zfiZNSaU","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"My Time","artist":"Jungkook","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jungkook","youtubeId":"IbAv1Qn0xk8","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Louder Than Bombs","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"BVzTBj2O6Dc","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"UGH!","artist":"BTS (Rap Line)","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"RM, Suga, J-Hope","youtubeId":"y-0QlQH5d3Y","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"00:00 (Zero O'Clock)","artist":"BTS (Vocal Line)","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"Jin, Jimin, V, Jungkook","youtubeId":"sBWesVezIrc","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Inner Child","artist":"V","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"V","youtubeId":"f_YO7BBOTSk","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Friends","artist":"Jimin & V","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"Jimin, V","youtubeId":"7C0W70FgeWo","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Moon","artist":"Jin","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"Jin","youtubeId":"c9BVvX0iQJA","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Respect","artist":"RM & Suga","album":"2020 — Map of the Soul: 7","year":2020,"type":"unit","members":"RM, Suga","youtubeId":"PGlNNesooys","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"We Are Bulletproof: The Eternal","artist":"BTS","album":"2020 — Map of the Soul: 7","year":2020,"type":"group","youtubeId":"7UWBYJjuIL0","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Ego","artist":"J-Hope","album":"2020 — Map of the Soul: 7","year":2020,"type":"solo","members":"J-Hope","youtubeId":"LmApDbvNCXg","image":"https://upload.wikimedia.org/wikipedia/en/5/52/Map_of_the_Soul_7.png"},
+  {"title":"Life Goes On","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"-5q5mZbe3V8","image":"https://upload.wikimedia.org/wikipedia/en/0/০4/BTS_-_Be_%28Deluxe_Edition%29.png"},
+  {"title":"Dynamite","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"gdZLi9oWNZg","image":"https://upload.wikimedia.org/wikipedia/en/4/4d/Dynamite_Cover.png"},
+  {"title":"Fly To My Room","artist":"Jin, Jimin, V, J-Hope","album":"2020 — BE","year":2020,"type":"unit","members":"Jin, Jimin, V, J-Hope","youtubeId":"jI_m5l4N3ys","image":"https://upload.wikimedia.org/wikipedia/en/0/০4/BTS_-_Be_%28Deluxe_Edition%29.png"},
+  {"title":"Blue & Grey","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"iP62Tg04vww","image":"https://upload.wikimedia.org/wikipedia/en/0/০4/BTS_-_Be_%28Deluxe_Edition%29.png"},
+  {"title":"Telepathy","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"OC29BN3R8dM","image":"https://upload.wikimedia.org/wikipedia/en/0/০4/BTS_-_Be_%28Deluxe_Edition%29.png"},
+  {"title":"Dis-ease","artist":"BTS","album":"2020 — BE","year":2020,"type":"group","youtubeId":"rSi4UIWbtM0","image":"https://upload.wikimedia.org/wikipedia/en/0/০4/BTS_-_Be_%28Deluxe_Edition%29.png"},
+  {"title":"Stay","artist":"RM, Jin, Jungkook","album":"2020 — BE","year":2020,"type":"unit","members":"RM, Jin, Jungkook","youtubeId":"8uxI-0ge4-Y","image":"https://upload.wikimedia.org/wikipedia/en/0/০4/BTS_-_Be_%28Deluxe_Edition%29.png"},
+  {"title":"Butter","artist":"BTS","album":"2021 — Singles","year":2021,"type":"group","youtubeId":"WMweEpGlu_U","image":"https://upload.wikimedia.org/wikipedia/en/d/db/BTS_-_Butter.png"},
+  {"title":"Permission to Dance","artist":"BTS","album":"2021 — Singles","year":2021,"type":"group","youtubeId":"CuklIb9d3fI","image":"https://upload.wikimedia.org/wikipedia/en/thumb/8/86/BTS_-_Permission_to_Dance.png/220px-BTS_-_Permission_to_Dance.png"},
+  {"title":"Yet To Come","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"kXpOEzNZ8hQ","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/20/BTS_-_Proof.png/220px-BTS_-_Proof.png"},
+  {"title":"Run BTS","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"aqW4xXUgmno","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/20/BTS_-_Proof.png/220px-BTS_-_Proof.png"},
+  {"title":"For Youth","artist":"BTS","album":"2022 — Proof","year":2022,"type":"group","youtubeId":"kwyQ0MgmnDU","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/20/BTS_-_Proof.png/220px-BTS_-_Proof.png"},
+  {"title":"Wild Flower","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"u18be_kRmC0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/RM_-_Indigo.png/220px-RM_-_Indigo.png"},
+  {"title":"Still Life","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"2vfmL4q2koo","image":"https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/RM_-_Indigo.png/220px-RM_-_Indigo.png"},
+  {"title":"All Day","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"sE5YAXaIypo","image":"https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/RM_-_Indigo.png/220px-RM_-_Indigo.png"},
+  {"title":"Closer","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"mJcjXjYWI6E","image":"https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/RM_-_Indigo.png/220px-RM_-_Indigo.png"},
+  {"title":"Lonely","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"7gISsiqxlN8","image":"https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/RM_-_Indigo.png/220px-RM_-_Indigo.png"},
+  {"title":"Hectic","artist":"RM","album":"2022 — RM: Indigo","year":2022,"type":"solo","members":"RM","youtubeId":"lYv70OCSB8M","image":"https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/RM_-_Indigo.png/220px-RM_-_Indigo.png"},
+  {"title":"The Astronaut","artist":"Jin","album":"2022 — Jin: Solo Singles","year":2022,"type":"solo","members":"Jin","youtubeId":"c6ASQOwKkhk","image":"https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Jin_-_The_Astronaut.png/220px-Jin_-_The_Astronaut.png"},
+  {"title":"Super Tuna","artist":"Jin","album":"2021 — Jin: Solo Singles","year":2021,"type":"solo","members":"Jin","youtubeId":"ArHGiOxYwHM","image":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/BTS_Korea_Pavilion_Expo_2020_01.jpg/440px-BTS_Korea_Pavilion_Expo_2020_01.jpg"},
+  {"title":"Abyss","artist":"Jin","album":"2020 — Jin: Solo Singles","year":2020,"type":"solo","members":"Jin","youtubeId":"aqtSOksH-NE","image":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/BTS_Korea_Pavilion_Expo_2020_01.jpg/440px-BTS_Korea_Pavilion_Expo_2020_01.jpg"},
+  {"title":"Tonight","artist":"Jin","album":"2019 — Jin: Solo Singles","year":2019,"type":"solo","members":"Jin","youtubeId":"xMFVyP2npjM","image":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/BTS_Korea_Pavilion_Expo_2020_01.jpg/440px-BTS_Korea_Pavilion_Expo_2020_01.jpg"},
+  {"title":"Haegeum","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"iy9qZR_OGa0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Agust_D_-_D-Day.png/220px-Agust_D_-_D-Day.png"},
+  {"title":"AMYGDALA","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"IX1dkYoLHVs","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Agust_D_-_D-Day.png/220px-Agust_D_-_D-Day.png"},
+  {"title":"Snooze","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"zCNqdvR9e_w","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Agust_D_-_D-Day.png/220px-Agust_D_-_D-Day.png"},
+  {"title":"People Pt.2","artist":"Agust D (Suga)","album":"2023 — Agust D: D-DAY","year":2023,"type":"solo","members":"Suga","youtubeId":"uVD-YgzDzyY","image":"https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Agust_D_-_D-Day.png/220px-Agust_D_-_D-Day.png"},
+  {"title":"More","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"pKdBFeewZYE","image":"https://upload.wikimedia.org/wikipedia/en/thumb/1/13/J-Hope_-_Jack_in_the_Box.png/220px-J-Hope_-_Jack_in_the_Box.png"},
+  {"title":"Arson","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"QmpTkkaKYSU","image":"https://upload.wikimedia.org/wikipedia/en/thumb/1/13/J-Hope_-_Jack_in_the_Box.png/220px-J-Hope_-_Jack_in_the_Box.png"},
+  {"title":"Future","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"Fh2PTrTaxv0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/1/13/J-Hope_-_Jack_in_the_Box.png/220px-J-Hope_-_Jack_in_the_Box.png"},
+  {"title":"What If...","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"QHLVk1JI8XI","image":"https://upload.wikimedia.org/wikipedia/en/thumb/1/13/J-Hope_-_Jack_in_the_Box.png/220px-J-Hope_-_Jack_in_the_Box.png"},
+  {"title":"Safety Zone","artist":"J-Hope","album":"2022 — J-Hope: Jack In The Box","year":2022,"type":"solo","members":"J-Hope","youtubeId":"VQ-qkm8KGD0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/1/13/J-Hope_-_Jack_in_the_Box.png/220px-J-Hope_-_Jack_in_the_Box.png"},
+  {"title":"Like Crazy","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"nOI67IDlNMQ","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Jimin_-_Face.png/220px-Jimin_-_Face.png"},
+  {"title":"Set Me Free Pt.2","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"UaywgAqcLxI","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Jimin_-_Face.png/220px-Jimin_-_Face.png"},
+  {"title":"Face-off","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"TLT_MqzRHfY","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Jimin_-_Face.png/220px-Jimin_-_Face.png"},
+  {"title":"Alone","artist":"Jimin","album":"2023 — Jimin: FACE","year":2023,"type":"solo","members":"Jimin","youtubeId":"7q9UDPZuTi0","image":"https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Jimin_-_Face.png/220px-Jimin_-_Face.png"},
+  {"title":"Slow Dancing","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"eI0iTRS0Ha8","image":"https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/V_-_Layover.png/220px-V_-_Layover.png"},
+  {"title":"Love Me Again","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"HYzyRHAHJl8","image":"https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/V_-_Layover.png/220px-V_-_Layover.png"},
+  {"title":"Rainy Days","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"yTsINmrAK4I","image":"https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/V_-_Layover.png/220px-V_-_Layover.png"},
+  {"title":"Blue","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"sIh9_cNCwPc","image":"https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/V_-_Layover.png/220px-V_-_Layover.png"},
+  {"title":"For Us","artist":"V","album":"2023 — V: Layover","year":2023,"type":"solo","members":"V","youtubeId":"LHtzWOLBdPc","image":"https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/V_-_Layover.png/220px-V_-_Layover.png"},
+  {"title":"Seven","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"QU9c0053UAU","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"3D","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"mHNCM-YALSA","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Standing Next to You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"UNo0TG9LwwI","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Yes or No","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"2Q_iK9rN2eo","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Please Don't Change","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"RbJjqB7x6Xg","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Hate You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"tAcKfnf0zv4","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Somebody","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"ONxOGXC_YNk","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Too Sad to Dance","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"ASG-mLJuZrc","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Shot Glass of Tears","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"vpnQilFlc_4","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"},
+  {"title":"Closer to You","artist":"Jungkook","album":"2023 — Jungkook: Golden","year":2023,"type":"solo","members":"Jungkook","youtubeId":"z6LbYRY9tdw","image":"https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Jungkook_-_Golden.png/220px-Jungkook_-_Golden.png"}
+];
+
+let currentSongIndex = 0;
+let currentFilter = 'all';
+let filteredSongs = [];
+
+function renderSongList() {
+    const songListDiv = document.getElementById('songList');
+    songListDiv.innerHTML = '';
+    const albumGroups = {};
+    filteredSongs.forEach((song, index) => {
+        if (!albumGroups[song.album]) albumGroups[song.album] = [];
+        albumGroups[song.album].push({...song, originalIndex: index});
+    });
+    Object.keys(albumGroups).forEach(albumName => {
+        const albumSection = document.createElement('div');
+        albumSection.className = 'album-section';
+        const albumHeader = document.createElement('div');
+        albumHeader.className = 'album-header';
+        albumHeader.textContent = `🎧 ${albumName}`;
+        albumSection.appendChild(albumHeader);
+        albumGroups[albumName].forEach(song => {
+            const songItem = document.createElement('div');
+            songItem.className = 'song-item';
+            if (song.originalIndex === currentSongIndex) songItem.classList.add('active');
+            songItem.innerHTML = `<h4>${song.title}</h4><p>${song.artist}</p>${song.members ? `<span class="member-tag">${song.members}</span>` : ''}`;
+            songItem.onclick = () => playSong(song.originalIndex);
+            albumSection.appendChild(songItem);
+        });
+        songListDiv.appendChild(albumSection);
+    });
+}
+
+function filterByType(type) {
+    currentFilter = type;
+    document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    filteredSongs = type === 'all' ? [...allSongs] : allSongs.filter(song => song.type === type);
+    renderSongList();
+}
+
+function playSong(index) {
+    currentSongIndex = index;
+    const song = allSongs[index];
+    document.getElementById('songTitle').textContent = song.title;
+    document.getElementById('artistName').textContent = song.artist;
+    document.getElementById('albumName').textContent = song.album;
+    document.getElementById('artistImg').src = song.image;
+    document.getElementById('statYear').textContent = song.year;
+    document.getElementById('statType').textContent = song.type.charAt(0).toUpperCase() + song.type.slice(1);
+    document.getElementById('statAlbum').textContent = song.album.split('—')[1]?.trim() || song.album;
+    if (song.youtubeId) {
+        document.getElementById('videoPlayer').innerHTML = `<iframe style="border-radius:12px" width="100%" height="400" src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 10px; text-align: center;">⚠️ Video not playing? Click "🔧 Fix Videos" to update!</p>`;
+    } else {
+        document.getElementById('videoPlayer').innerHTML = '<div style="background: rgba(255,255,255,0.1); padding: 40px; border-radius: 12px; text-align: center;"><p style="color: white; font-size: 1.2rem;">❌ No video</p><p style="color: rgba(255,255,255,0.7); margin-top: 10px;">Click "🔧 Fix Videos" to add one!</p></div>';
+    }
+    renderSongList();
+    if (document.getElementById('adminPanel').classList.contains('show')) updateAdminPanel();
+}
+
+function togglePlay() { alert('Use YouTube player controls! 🎵'); }
+function previousSong() { playSong((currentSongIndex - 1 + allSongs.length) % allSongs.length); }
+function nextSong() { playSong((currentSongIndex + 1) % allSongs.length); }
+function shuffleSong() { playSong(Math.floor(Math.random() * allSongs.length)); }
+
+document.getElementById('searchBox').addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    if (searchTerm === '') {
+        filteredSongs = currentFilter === 'all' ? [...allSongs] : allSongs.filter(s => s.type === currentFilter);
+    } else {
+        const baseFilter = currentFilter === 'all' ? allSongs : allSongs.filter(s => s.type === currentFilter);
+        filteredSongs = baseFilter.filter(song => song.title.toLowerCase().includes(searchTerm) || song.artist.toLowerCase().includes(searchTerm) || song.album.toLowerCase().includes(searchTerm) || (song.members && song.members.toLowerCase().includes(searchTerm)));
+    }
+    renderSongList();
+});
+
+function toggleAdmin() {
+    const panel = document.getElementById('adminPanel');
+    panel.classList.toggle('show');
+    if (panel.classList.contains('show')) updateAdminPanel();
+}
+function updateAdminPanel() {
+    const song = allSongs[currentSongIndex];
+    document.getElementById('currentSongName').textContent = song.title + ' - ' + song.artist;
+    document.getElementById('currentVideoId').value = song.youtubeId || 'Not set';
+    document.getElementById('newVideoId').value = '';
+}
+function searchYouTube() {
+    const song = allSongs[currentSongIndex];
+    window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(song.title + ' ' + song.artist + ' lyrics'), '_blank');
+}
+function updateVideoId() {
+    const newId = document.getElementById('newVideoId').value.trim();
+    if (!newId) return alert('Enter a YouTube video ID!');
+    allSongs[currentSongIndex].youtubeId = newId;
+    playSong(currentSongIndex);
+    updateAdminPanel();
+    alert('Video updated! Click "💾 Save All Changes" to save permanently.');
+}
+function copyAllData() {
+    const dataStr = 'const allSongs = ' + JSON.stringify(allSongs, null, 2) + ';';
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    modal.innerHTML = `<div style="background:white;padding:30px;border-radius:15px;max-width:800px;width:100%;max-height:90vh;overflow:auto;"><h3 style="color:#764ba2;margin-bottom:15px;">📋 Copy This Data</h3><p style="color:#666;font-size:0.9rem;margin-bottom:15px;">1. Click in box<br>2. Ctrl+A (or Cmd+A)<br>3. Ctrl+C (or Cmd+C)<br>4. Paste into HTML file</p><textarea id="dataOutput" style="width:100%;height:400px;padding:15px;border:2px solid #764ba2;border-radius:10px;font-family:monospace;font-size:0.85rem;" readonly>${dataStr}</textarea><div style="margin-top:15px;text-align:right;"><button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#764ba2;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:bold;">Close</button></div></div>`;
+    document.body.appendChild(modal);
+    setTimeout(() => { const t = document.getElementById('dataOutput'); t.focus(); t.select(); }, 100);
+}
+
+filteredSongs = [...allSongs];
+renderSongList();
+playSong(0);
+</script>
+</body>
+</html>
