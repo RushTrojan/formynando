@@ -95,6 +95,27 @@
             font-size: 0.75rem;
             margin-top: 3px;
         }
+        
+        /* Lyrics Icon Styles */
+        .lyrics-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            background: rgba(255, 215, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+        }
+        
+        .lyrics-icon:hover {
+            background: rgba(255, 215, 0, 0.4);
+            transform: scale(1.1);
+        }
+        
         .player-section { display: grid; gap: 25px; }
         .now-playing {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
@@ -489,8 +510,36 @@ function renderSongList() {
             const songItem = document.createElement('div');
             songItem.className = 'song-item';
             if (song.originalIndex === currentSongIndex) songItem.classList.add('active');
-            songItem.innerHTML = `<h4>${song.title}</h4><p>${song.artist}</p>${song.members ? `<span class="member-tag">${song.members}</span>` : ''}`;
-            songItem.onclick = () => playSong(song.originalIndex);
+            
+            // Check if lyrics exist for this song
+            const hasLyrics = song.youtubeId === 'gdZLi9oWNZg'; // Dynamite (add more later)
+            const lyricsIcon = hasLyrics ? '<span class="lyrics-icon" title="View Lyrics">🎤</span>' : '';
+            
+            songItem.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4>${song.title}</h4>
+                        <p>${song.artist}</p>
+                        ${song.members ? `<span class="member-tag">${song.members}</span>` : ''}
+                    </div>
+                    ${lyricsIcon}
+                </div>
+            `;
+            
+            // Click handler
+            songItem.onclick = (e) => {
+                // If clicking on lyrics icon, go to lyrics page
+                if (e.target.classList.contains('lyrics-icon')) {
+                    e.stopPropagation();
+                    if (song.youtubeId === 'gdZLi9oWNZg') { // Dynamite
+                        window.location.href = 'lyrics-dynamite.html';
+                    }
+                } else {
+                    // Otherwise play song
+                    playSong(song.originalIndex);
+                }
+            };
+            
             albumSection.appendChild(songItem);
         });
         songListDiv.appendChild(albumSection);
@@ -504,6 +553,7 @@ function filterByType(type) {
     filteredSongs = type === 'all' ? [...allSongs] : allSongs.filter(song => song.type === type);
     renderSongList();
 }
+
 function playSong(index) {
     currentSongIndex = index;
     const song = allSongs[index];
@@ -514,7 +564,7 @@ function playSong(index) {
     document.getElementById('statType').textContent = song.type.charAt(0).toUpperCase() + song.type.slice(1);
     document.getElementById('statAlbum').textContent = song.album.split('—')[1]?.trim() || song.album;
     
-    // Add clickable cursor and onclick handler
+    // Add clickable cursor and onclick handler for song title
     const titleElement = document.getElementById('songTitle');
     titleElement.style.cursor = 'pointer';
     titleElement.onclick = () => {
