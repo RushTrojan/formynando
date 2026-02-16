@@ -512,7 +512,8 @@ function renderSongList() {
             if (song.originalIndex === currentSongIndex) songItem.classList.add('active');
             
             // Check if lyrics exist for this song
-            const hasLyrics = song.youtubeId === 'gdZLi9oWNZg'; // Dynamite (add more later)
+            const hasLyrics = song.youtubeId === 'gdZLi9oWNZg' || song.youtubeId === 'XsX3ATc3FbA'; // Dynamite   // Boy With Luv (add more later)
+
             const lyricsIcon = hasLyrics ? '<span class="lyrics-icon" title="View Lyrics">🎤</span>' : '';
             
             songItem.innerHTML = `
@@ -533,7 +534,9 @@ function renderSongList() {
                     e.stopPropagation();
                     if (song.youtubeId === 'gdZLi9oWNZg') { // Dynamite
                         window.location.href = 'lyrics-dynamite.html';
-                    }
+                    }else if (song.youtubeId === 'XsX3ATc3FbA') { // Boy With Luv
+    window.location.href = 'lyrics-boy-with-luv.html';
+}
                 } else {
                     // Otherwise play song
                     playSong(song.originalIndex);
@@ -571,7 +574,9 @@ function playSong(index) {
         // Check if lyrics page exists for this song
         if (song.youtubeId === 'gdZLi9oWNZg') { // Dynamite
             window.location.href = 'lyrics-dynamite.html';
-        } else {
+        }else if (song.youtubeId === 'XsX3ATc3FbA') { // Boy With Luv
+    window.location.href = 'lyrics-boy-with-luv.html';
+} else {
             alert('Lyrics coming soon for this song! 💜');
         }
     };

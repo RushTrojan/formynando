@@ -1,0 +1,208 @@
+
+You said:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boy With Luv - Lyrics 💜</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF69B4 0%, #FFB6C1 50%, #FFC0CB 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(-5px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px 20px;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 40px;
+            min-height: 100vh;
+        }
+        
+        .video-section {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+        
+        .song-info {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .song-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #FF1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+        
+        .song-info h2 {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .song-info .meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        #videoPlayer {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .lyrics-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            line-height: 2;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .lyrics-section h3 {
+            font-size: 1.3rem;
+            margin: 30px 0 15px 0;
+            color: #FF1493;
+            opacity: 0.9;
+            font-weight: bold;
+        }
+        
+        .lyrics-section p {
+            margin-bottom: 8px;
+            opacity: 0.95;
+        }
+        
+        .verse {
+            margin-bottom: 35px;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-section {
+                position: relative;
+                top: 0;
+            }
+            
+            .lyrics-section {
+                padding: 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Player</button>
+    
+    <div class="container">
+        <div class="video-section">
+            <div class="song-info">
+                <h1>Boy With Luv</h1>
+                <h2>BTS feat. Halsey</h2>
+                <div class="meta">
+                    <span>📅 2019</span>
+                    <span>💿 Map of the Soul: Persona</span>
+                    <span>🎵 Group</span>
+                </div>
+            </div>
+            
+            <div id="videoPlayer">
+                <iframe 
+                    width="100%" 
+                    height="225" 
+                    src="https://www.youtube.com/embed/XsX3ATc3FbA?rel=0" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        
+        <div class="lyrics-section">
+            <div class="verse">
+                <h3>[Verse 1]</h3>
+                <p>Modeun ge gunggeumhae how's your day?</p>
+                <p>Oh, tell me (Oh yeah, oh yeah, ah yeah, ah yeah)</p>
+                <p>Mwoga neol haengbokage haneunji</p>
+                <p>Oh, text me (Oh yeah, oh yeah, oh yeah, oh yeah)</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Verse 2]</h3>
+                <p>Your every picture</p>
+                <p>Nae meorimate dugo sipeo, oh-oh bae</p>
+                <p>Come be my teacher</p>
+                <p>Ne modeun geol da gareuchyeojwo</p>
+                <p> Your one, your two</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Pre-Chorus: Jung Kook, Jimin]</h3>
+                <p>Listen, my, my baby naneun</p>
+                <p>Jeo haneureul nopi nalgo isseo</p>
+                <p>(Geuttae niga naege jwossdeon du nalgaero)</p>
+                <p>Ije yeogin neomu nopa</p>
+                <p>Nan nae nune neol majchugo sipeo</p>
+                <p> Yeah, you're makin' me a boy with love</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Chorus: Halsey , JungKook , Jimin]</h3>
+                <p>Oh my, my, my (uh) oh my, my, my</p>
+            </div>
+            
+            <!-- Continue adding all verses, pre-chorus, chorus, bridge sections -->
+            <!-- from your Document 6 -->
+            
+            <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.3); opacity: 0.7; font-size: 0.9rem;">
+                <p>💜 Please support BTS by streaming on official platforms</p>
+                <p>Lyrics for educational purposes only</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
