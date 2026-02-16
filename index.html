@@ -504,7 +504,6 @@ function filterByType(type) {
     filteredSongs = type === 'all' ? [...allSongs] : allSongs.filter(song => song.type === type);
     renderSongList();
 }
-
 function playSong(index) {
     currentSongIndex = index;
     const song = allSongs[index];
@@ -514,6 +513,18 @@ function playSong(index) {
     document.getElementById('statYear').textContent = song.year;
     document.getElementById('statType').textContent = song.type.charAt(0).toUpperCase() + song.type.slice(1);
     document.getElementById('statAlbum').textContent = song.album.split('—')[1]?.trim() || song.album;
+    
+    // Add clickable cursor and onclick handler
+    const titleElement = document.getElementById('songTitle');
+    titleElement.style.cursor = 'pointer';
+    titleElement.onclick = () => {
+        // Check if lyrics page exists for this song
+        if (song.youtubeId === 'gdZLi9oWNZg') { // Dynamite
+            window.location.href = 'lyrics-dynamite.html';
+        } else {
+            alert('Lyrics coming soon for this song! 💜');
+        }
+    };
     
     if (song.youtubeId) {
         document.getElementById('videoPlayer').innerHTML = `<iframe style="border-radius:12px" width="100%" height="400" src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;

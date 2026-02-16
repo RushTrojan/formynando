@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamite - Lyrics 💜</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px 20px;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 40px;
+            min-height: 100vh;
+        }
+        
+        .video-section {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+        
+        .song-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .song-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+        
+        .song-info h2 {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .song-info .meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        #videoPlayer {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .lyrics-section {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 2;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .lyrics-section h3 {
+            font-size: 1.3rem;
+            margin: 30px 0 15px 0;
+            color: #FFD700;
+            opacity: 0.9;
+            font-weight: bold;
+        }
+        
+        .lyrics-section p {
+            margin-bottom: 8px;
+            opacity: 0.95;
+        }
+        
+        .verse {
+            margin-bottom: 35px;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-section {
+                position: relative;
+                top: 0;
+            }
+            
+            .lyrics-section {
+                padding: 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Player</button>
+    
+    <div class="container">
+        <div class="video-section">
+            <div class="song-info">
+                <h1>Dynamite</h1>
+                <h2>BTS</h2>
+                <div class="meta">
+                    <span>📅 2020</span>
+                    <span>💿 BE</span>
+                    <span>🎵 Group</span>
+                </div>
+            </div>
+            
+            <div id="videoPlayer">
+                <iframe 
+                    width="100%" 
+                    height="225" 
+                    src="https://www.youtube.com/embed/gdZLi9oWNZg?rel=0" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        
+        <div class="lyrics-section">
+            <div class="verse">
+                <h3>[Intro: Jung Kook]</h3>
+                <p>'Cause I, I, I'm in the stars tonight</p>
+                <p>So watch me bring the fire and set the night alight</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Verse 1: Jung Kook]</h3>
+                <p>Shoes on, get up in the morn'</p>
+                <p>Cup of milk, let's rock and roll</p>
+                <p>King Kong, kick the drum</p>
+                <p>Rolling on like a Rolling Stone</p>
+                <p>Sing-song when I'm walkin' home</p>
+                <p>Jump up to the top, LeBron</p>
+                <p>Ding-dong, call me on my phone</p>
+                <p>Ice tea and a game of ping pong</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Pre-Chorus: RM, j-hope]</h3>
+                <p>This is gettin' heavy, can you hear the bass boom? I'm ready (Woo-hoo)</p>
+                <p>Life is sweet as honey, yeah, this beat cha-ching like money, huh</p>
+                <p>Disco overload, I'm into that, I'm good to go</p>
+                <p>I'm diamond, you know I glow up</p>
+                <p>Hey, so let's go</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Chorus: Jung Kook, Jimin]</h3>
+                <p>'Cause I, I, I'm in the stars tonight</p>
+                <p>So watch me bring the fire and set the night alight (Hey)</p>
+                <p>Shinin' through the city with a little funk and soul</p>
+                <p>So I'ma light it up like dynamite, woah-oh-oh</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Verse 2: V, V & Jin, RM]</h3>
+                <p>Bring a friend, join the crowd, whoever wanna come along</p>
+                <p>Word up, talk the talk, just move like we off the wall</p>
+                <p>Day or night, the sky's alight, so we dance to the break of dawn (Hey)</p>
+                <p>Ladies and gentlemen, I got the medicine, so you should keep ya eyes on the ball (Huh)</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Pre-Chorus: SUGA, Jimin, RM]</h3>
+                <p>This is gettin' heavy, can you hear the bass boom? I'm ready (Woo-hoo)</p>
+                <p>Life is sweet as honey, yeah, this beat cha-ching like money, huh</p>
+                <p>Disco overload, I'm into that, I'm good to go</p>
+                <p>I'm diamond, you know I glow up</p>
+                <p>Let's go</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Chorus: Jung Kook, V]</h3>
+                <p>'Cause I, I, I'm in the stars tonight</p>
+                <p>So watch me bring the fire and set the night alight (Hey)</p>
+                <p>Shinin' through the city with a little funk and soul</p>
+                <p>So I'ma light it up like dynamite, woah-oh-oh</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Post-Chorus: Jung Kook & Jimin, Jung Kook, Jin]</h3>
+                <p>Dyn-na-na-na, na-na-na-na-na, na-na-na, life is dynamite</p>
+                <p>Dyn-na-na-na, na-na-na-na-na, na-na-na, life is dynamite</p>
+                <p>Shinin' through the city with a little funk and soul</p>
+                <p>So I'ma light it up like dynamite, woah-oh-oh</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Bridge: Jung Kook, Jimin, Jin, V]</h3>
+                <p>Dyn-na-na-na, na-na, na-na, ayy</p>
+                <p>Dyn-na-na-na, na-na, na-na, ayy</p>
+                <p>Dyn-na-na-na, na-na, na-na, ayy</p>
+                <p>Light it up like dynamite</p>
+                <p>Dyn-na-na-na, na-na, na-na, ayy</p>
+                <p>Dyn-na-na-na, na-na, na-na, ayy</p>
+                <p>Dyn-na-na-na, na-na, na-na, ayy</p>
+                <p>Light it up like dynamite</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Chorus: Jimin, Jung Kook, Jin]</h3>
+                <p>'Cause I, I, I'm in the stars tonight</p>
+                <p>So watch me bring the fire and set the night alight</p>
+                <p>Shinin' through the city with a little funk and soul</p>
+                <p>So I'ma light it up like dynamite (This is ah)</p>
+                <p>'Cause I, I, I'm in the stars tonight</p>
+                <p>So watch me bring the fire and set the night alight (Alight, oh)</p>
+                <p>Shinin' through the city with a little funk and soul</p>
+                <p>So I'ma light (Light) it (It) up (Up) like (Like) dynamite (Dynamite), woah-oh-oh</p>
+            </div>
+            
+            <div class="verse">
+                <h3>[Post-Chorus: Jimin, Jin, V]</h3>
+                <p>Dyn-na-na-na, na-na-na-na-na, na-na-na, life is dynamite (Life is dynamite)</p>
+                <p>Dyn-na-na-na, na-na-na-na-na, na-na-na, life is dynamite (Oh)</p>
+                <p>Shinin' through the city with a little funk and soul</p>
+                <p>So I'ma light it up like dynamite, woah-oh-oh</p>
+            </div>
+            
+            <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2); opacity: 0.6; font-size: 0.9rem;">
+                <p>💜 Please support BTS by streaming on official platforms</p>
+                <p>Lyrics for educational purposes only</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
